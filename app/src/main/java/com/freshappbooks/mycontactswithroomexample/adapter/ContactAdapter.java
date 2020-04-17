@@ -20,6 +20,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     public ContactAdapter(List<Contact> listOfContacts) {
         this.listOfContacts = listOfContacts;
+        this.notifyDataSetChanged();
+    }
+
+    public void setListOfContacts(List<Contact> listOfContacts) {
+        this.listOfContacts = listOfContacts;
+        this.notifyDataSetChanged();
     }
 
     @NonNull

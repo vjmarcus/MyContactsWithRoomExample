@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:text="Добавить контакт"
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/editText_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Имя"
+        android:layout_margin="8dp"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="106dp" />
+    <EditText
+        android:id="@+id/editText_surname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Фамилия"
+        android:layout_margin="8dp"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="106dp" />
+
+</LinearLayout>
