@@ -1,7 +1,9 @@
 package com.freshappbooks.mycontactswithroomexample;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -46,10 +48,26 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.floatingActionButton);
         recyclerView = findViewById(R.id.recycler_view);
 
-        adapter = new ContactAdapter(listOfContacts);
+        adapter = new ContactAdapter(listOfContacts, MainActivity.this);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView
+                    , @NonNull RecyclerView.ViewHolder viewHolder
+                    , @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Contact contact = listOfContacts.get(viewHolder.getAdapterPosition());
+                deleteContact(contact);
+            }
+        }).attachToRecyclerView(recyclerView);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void addAndEditContact(final boolean isUpdate, final Contact contact, final int position) {
+    public void addAndEditContact(final boolean isUpdate, final Contact contact, final int position) {
         LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
         View view = layoutInflater.inflate(R.layout.add_edit_contact, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -67,18 +85,19 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = view.findViewById(R.id.textView_label);
         final EditText editTextName = view.findViewById(R.id.editText_name);
         final EditText editTextSurName = view.findViewById(R.id.editText_surname);
-        textView.setText(!isUpdate ? "Добавить контакт" : "Обновить контакт");
+        textView.setText(!isUpdate ? getString(R.string.add_contact) : getString(R.string.update_contact));
         if (isUpdate && contact!= null) {
             editTextName.setText(contact.getName());
             editTextSurName.setText(contact.getSurName());
         }
-        builder.setCancelable(false).setPositiveButton(isUpdate ? "Обновить" : "Создать", new DialogInterface.OnClickListener() {
+        builder.setCancelable(false)
+                .setPositiveButton(isUpdate ? getString(R.string.update) : getString(R.string.add), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (TextUtils.isEmpty(editTextName.getText().toString())){
-                    Toast.makeText(MainActivity.this, "Введите Имя", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.add_name, Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(editTextSurName.getText().toString())){
-                    Toast.makeText(MainActivity.this, "Введите Фамилию", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.add_surname, Toast.LENGTH_SHORT).show();
                 } else {
                     if (isUpdate && contact != null) {
                         updateContact(editTextName.getText().toString(), editTextSurName.getText().toString(), position);
@@ -88,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        }).setNegativeButton("Отмена", null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 

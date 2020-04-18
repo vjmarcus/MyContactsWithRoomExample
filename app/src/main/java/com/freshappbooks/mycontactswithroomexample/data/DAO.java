@@ -20,9 +20,9 @@ public interface DAO  {
     @Update
     void updateContact(Contact contact);
 
-    @Query("select * from contacts")
+    @Query("SELECT * FROM contacts")
     public List<Contact> getAllContacts();
 
-    @Query("select * from contacts where id ==:id ")
+    @Query("SELECT * FROM contacts WHERE id ==:id ")
     public Contact getContact(int id);
 }

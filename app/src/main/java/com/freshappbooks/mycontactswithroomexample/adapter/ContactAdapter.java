@@ -4,10 +4,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.freshappbooks.mycontactswithroomexample.MainActivity;
 import com.freshappbooks.mycontactswithroomexample.R;
 import com.freshappbooks.mycontactswithroomexample.model.Contact;
 
@@ -17,9 +19,11 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
     private List<Contact> listOfContacts;
+    private MainActivity activity;
 
-    public ContactAdapter(List<Contact> listOfContacts) {
+    public ContactAdapter(List<Contact> listOfContacts, MainActivity activity) {
         this.listOfContacts = listOfContacts;
+        this.activity = activity;
         this.notifyDataSetChanged();
     }
 
@@ -37,10 +41,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Contact contact = listOfContacts.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        final Contact contact = listOfContacts.get(position);
         holder.textViewName.setText(contact.getName());
         holder.textViewSurName.setText(contact.getSurName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.addAndEditContact(true, contact, position);
+            }
+        });
     }
 
     @Override
